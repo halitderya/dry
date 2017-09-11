@@ -27,6 +27,8 @@ namespace KuruTemizleme2.Ekranlar
         SqlParameter uptparam6 = new SqlParameter("@ICON", SqlDbType.Image);
 
 
+
+
         List<SqlParameter> prm = new List<SqlParameter>()
  {
 
