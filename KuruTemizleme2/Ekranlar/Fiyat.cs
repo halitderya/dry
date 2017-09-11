@@ -87,6 +87,9 @@ namespace KuruTemizleme2.Ekranlar
 
 
 
+
+
+
         }
         private void Fiyat_Load(object sender, EventArgs e)
         {
