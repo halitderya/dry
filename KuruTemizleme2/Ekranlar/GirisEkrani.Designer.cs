@@ -263,7 +263,7 @@
             this.tableLayoutPanel1.SetRowSpan(this.metroLabel2, 2);
             this.metroLabel2.Size = new System.Drawing.Size(101, 100);
             this.metroLabel2.TabIndex = 13;
-            this.metroLabel2.Text = "Chris Jordan";
+            this.metroLabel2.Text = "UserName";
             this.metroLabel2.WrapToLine = true;
             // 
             // GirisEkrani

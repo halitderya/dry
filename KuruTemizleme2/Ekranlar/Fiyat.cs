@@ -19,15 +19,15 @@ namespace KuruTemizleme2.Ekranlar
         SqlConnection MyConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ConnectionString);
         SqlParameter param = new SqlParameter("@Sira", SqlDbType.Int);
         int rowcount = 0;
-        SqlParameter uptparam1 = new SqlParameter("@urun", SqlDbType.NVarChar);
-        SqlParameter uptparam2 = new SqlParameter("@grup", SqlDbType.NVarChar);
-        SqlParameter uptparam3 = new SqlParameter("@1_1", SqlDbType.Int);
-        SqlParameter uptparam4 = new SqlParameter("@1_2", SqlDbType.Int);
-        SqlParameter uptparam5 = new SqlParameter("@1_3", SqlDbType.Int);
-        SqlParameter uptparam6 = new SqlParameter("@ICON", SqlDbType.Image);
+        SqlParameter uptparam1 = new SqlParameter("@product", SqlDbType.NVarChar);
+        SqlParameter uptparam2 = new SqlParameter("@group", SqlDbType.NVarChar);
+        SqlParameter uptparam3 = new SqlParameter("@wet", SqlDbType.Int);
+        SqlParameter uptparam4 = new SqlParameter("@dry", SqlDbType.Int);
+        SqlParameter uptparam5 = new SqlParameter("@iron", SqlDbType.Int);
+        SqlParameter uptparam6 = new SqlParameter("@icon", SqlDbType.Image);
+
         private int rowIndex = 0;
         int before, after; //for finding deleted row count
-
 
 
         List<SqlParameter> prm = new List<SqlParameter>()
@@ -71,12 +71,12 @@ namespace KuruTemizleme2.Ekranlar
             { MyConnection.Open(); }
             for (int h=0; h<rowcount-1;h++)
             {
-                uptparam1.Value = dgv.Rows[h].Cells["urunadi"].Value.ToString();
-                uptparam2.Value = dgv.Rows[h].Cells["grup"].Value.ToString();
-                uptparam3.Value = dgv.Rows[h].Cells["birbir"].Value;
-                uptparam4.Value = dgv.Rows[h].Cells["biriki"].Value;
-                uptparam5.Value = dgv.Rows[h].Cells["biruc"].Value;
-                uptparam6.Value = dgv.Rows[h].Cells["ikibir"].Value;
+                uptparam1.Value = dgv.Rows[h].Cells["product_name"].Value.ToString();
+                uptparam2.Value = dgv.Rows[h].Cells["product_type"].Value.ToString();
+                uptparam3.Value = dgv.Rows[h].Cells["wet_cleaning"].Value;
+                uptparam4.Value = dgv.Rows[h].Cells["dry_cleaning"].Value;
+                uptparam5.Value = dgv.Rows[h].Cells["ironing"].Value;
+                uptparam6.Value = dgv.Rows[h].Cells["icon"].Value;
                 upt.ExecuteNonQuery();
 
             }
@@ -188,36 +188,52 @@ namespace KuruTemizleme2.Ekranlar
         private void metroButton1_Click(object sender, EventArgs e)
         {
 
-            //sutuneklesil.Show();
-            //sqlclass.hizmetsayisi();
+
             
         }
 
-        private void dgv_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+
+        private void dgv_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e) 
         {
-            if (e.Button==MouseButtons.Right)
+
+            if (e.Button == MouseButtons.Right)
             {
-                if(dgv.SelectedRows.Count ==1)
+                if (dgv.SelectedCells.Count > 0)
                 {
-                    dgv.CurrentCell = null;
-                    dgv.CurrentCell = dgv.Rows[e.RowIndex].Cells[0];
+                    int selectedrowindex = dgv.SelectedCells[0].RowIndex;
+
+                    DataGridViewRow selectedRow = dgv.Rows[selectedrowindex];
+
+
+                    if (Convert.ToString(selectedRow.Cells["urunadi"].Value).Length>0) // check if row empty or not
+                    {
+                        dgv.Rows[e.RowIndex].Selected = true;
+                        rowIndex = e.RowIndex;
+                        contextMenuStrip1.Show(this.dgv, e.Location);
+                        contextMenuStrip1.Show(Cursor.Position);
+                    }
+
+
+
+
+
 
                 }
 
-                else if (dgv.SelectedRows.Count>1)
-                {
-                    
-                }
-                dgv.Rows[e.RowIndex].Selected = true;
-                rowIndex = e.RowIndex;
-                contextMenuStrip1.Show(this.dgv, e.Location);
-                contextMenuStrip1.Show(Cursor.Position);
+
+               
+
+
+
+
+              
+
+
+                
             }
-
-
-
-
+  
         }
+        
 
 
 
@@ -228,17 +244,42 @@ namespace KuruTemizleme2.Ekranlar
 
             if (confirmdelete==DialogResult.Yes)
             {
-                 before = dgv.RowCount; //finding rowcount before delete
-
-                foreach (DataGridViewRow row in dgv.SelectedRows)
+                try
                 {
-                    
-                    dgv.Rows.RemoveAt(row.Index);
-                     after = dgv.RowCount; //finding rowcount after delete
-                    
+
+
+
+                    before = dgv.RowCount; //finding rowcount before delete
+
+                    if (!this.dgv.Rows[this.rowIndex].IsNewRow)
+                    {
+
+                        foreach (DataGridViewRow row in dgv.SelectedRows)
+                        {
+                            dgv.Rows.RemoveAt(row.Index);
+                            after = dgv.RowCount; //finding rowcount after delete
+
+
+                        }
+
+
+
+
+                    }
+                    else {  }
                 }
-                if (after < before)
-                { MetroFramework.MetroMessageBox.Show(this, (before - after).ToString() + "Row(s) removed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+
+                catch(Exception ex)
+                {
+                    MetroFramework.MetroMessageBox.Show(this,"An error occured when trying remove rows. Contact your software supplier. Detailed information: "+ex.Message.ToString(),"Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                finally
+                {
+                    MetroFramework.MetroMessageBox.Show(this,(before-after).ToString()+ " Row(s) removed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                }
             }
             else if (confirmdelete==DialogResult.No)
             {
