@@ -25,7 +25,8 @@ namespace KuruTemizleme2.Ekranlar
         SqlParameter uptparam4 = new SqlParameter("@1_2", SqlDbType.Int);
         SqlParameter uptparam5 = new SqlParameter("@1_3", SqlDbType.Int);
         SqlParameter uptparam6 = new SqlParameter("@ICON", SqlDbType.Image);
-
+        private int rowIndex = 0;
+        int before, after; //for finding deleted row count
 
 
 
@@ -162,6 +163,7 @@ namespace KuruTemizleme2.Ekranlar
 
 
         }
+        
 
         private void dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -180,14 +182,69 @@ namespace KuruTemizleme2.Ekranlar
 
 
             }
+
         }
 
         private void metroButton1_Click(object sender, EventArgs e)
         {
 
-            sutuneklesil.Show();
-            sqlclass.hizmetsayisi();
+            //sutuneklesil.Show();
+            //sqlclass.hizmetsayisi();
             
+        }
+
+        private void dgv_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button==MouseButtons.Right)
+            {
+                if(dgv.SelectedRows.Count ==1)
+                {
+                    dgv.CurrentCell = null;
+                    dgv.CurrentCell = dgv.Rows[e.RowIndex].Cells[0];
+
+                }
+
+                else if (dgv.SelectedRows.Count>1)
+                {
+                    
+                }
+                dgv.Rows[e.RowIndex].Selected = true;
+                rowIndex = e.RowIndex;
+                contextMenuStrip1.Show(this.dgv, e.Location);
+                contextMenuStrip1.Show(Cursor.Position);
+            }
+
+
+
+
+        }
+
+
+
+        private void removeRowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+           DialogResult confirmdelete= MetroFramework.MetroMessageBox.Show(this, dgv.SelectedRows.Count.ToString() + " Row(s) will be removed. Are you sure to proceed?", "Confirm Erase?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+
+            if (confirmdelete==DialogResult.Yes)
+            {
+                 before = dgv.RowCount; //finding rowcount before delete
+
+                foreach (DataGridViewRow row in dgv.SelectedRows)
+                {
+                    
+                    dgv.Rows.RemoveAt(row.Index);
+                     after = dgv.RowCount; //finding rowcount after delete
+                    
+                }
+                if (after < before)
+                { MetroFramework.MetroMessageBox.Show(this, (before - after).ToString() + "Row(s) removed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            }
+            else if (confirmdelete==DialogResult.No)
+            {
+
+            }
+       
         }
     }
 }

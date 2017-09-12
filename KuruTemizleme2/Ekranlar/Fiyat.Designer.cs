@@ -28,16 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel2 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.urunadi = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.urunadi = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wet_cleaning = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dry_cleaning = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ironing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.icon = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -60,10 +67,13 @@
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
-            this.urunadi,
             this.grup,
-            this.Column4,
-            this.icon});
+            this.urunadi,
+            this.wet_cleaning,
+            this.dry_cleaning,
+            this.ironing,
+            this.icon,
+            this.Column4});
             this.dgv.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgv.Location = new System.Drawing.Point(20, 60);
             this.dgv.Name = "dgv";
@@ -71,6 +81,7 @@
             this.dgv.TabIndex = 1;
             this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellClick);
             this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellContentClick);
+            this.dgv.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_CellMouseUp);
             // 
             // button2
             // 
@@ -78,7 +89,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
+            this.button2.Text = "RowCount()";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -90,7 +101,22 @@
             this.metroButton1.TabIndex = 4;
             this.metroButton1.Text = "Hizmet Ekleme / Silme";
             this.metroButton1.UseSelectable = true;
+            this.metroButton1.Visible = false;
             this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeRowToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 26);
+            // 
+            // removeRowToolStripMenuItem
+            // 
+            this.removeRowToolStripMenuItem.Name = "removeRowToolStripMenuItem";
+            this.removeRowToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.removeRowToolStripMenuItem.Text = "Remove Row(s)";
+            this.removeRowToolStripMenuItem.Click += new System.EventHandler(this.removeRowToolStripMenuItem_Click);
             // 
             // ID
             // 
@@ -99,31 +125,49 @@
             this.ID.Name = "ID";
             this.ID.Visible = false;
             // 
-            // urunadi
-            // 
-            this.urunadi.DataPropertyName = "product_name";
-            this.urunadi.HeaderText = "Ürün Adı";
-            this.urunadi.Name = "urunadi";
-            // 
             // grup
             // 
             this.grup.DataPropertyName = "product_type";
-            this.grup.HeaderText = "Grup";
+            this.grup.HeaderText = "Service Type";
             this.grup.Name = "grup";
             // 
-            // Column4
+            // urunadi
             // 
-            this.Column4.HeaderText = "Ekle";
-            this.Column4.Name = "Column4";
-            this.Column4.Text = "Gözat...";
-            this.Column4.Visible = false;
+            this.urunadi.DataPropertyName = "product_name";
+            this.urunadi.HeaderText = "Service Name";
+            this.urunadi.Name = "urunadi";
+            // 
+            // wet_cleaning
+            // 
+            this.wet_cleaning.DataPropertyName = "wet_cleaning";
+            this.wet_cleaning.HeaderText = "Washing";
+            this.wet_cleaning.Name = "wet_cleaning";
+            // 
+            // dry_cleaning
+            // 
+            this.dry_cleaning.DataPropertyName = "dry_cleaning";
+            this.dry_cleaning.HeaderText = "Dry Cleaning";
+            this.dry_cleaning.Name = "dry_cleaning";
+            // 
+            // ironing
+            // 
+            this.ironing.DataPropertyName = "ironing";
+            this.ironing.HeaderText = "Ironing";
+            this.ironing.Name = "ironing";
             // 
             // icon
             // 
             this.icon.DataPropertyName = "icon";
-            this.icon.HeaderText = "Simge";
+            this.icon.HeaderText = "Icon";
             this.icon.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
             this.icon.Name = "icon";
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Add";
+            this.Column4.Name = "Column4";
+            this.Column4.Text = "Browse...";
+            this.Column4.Visible = false;
             // 
             // Fiyat
             // 
@@ -139,6 +183,7 @@
             this.Load += new System.EventHandler(this.Fiyat_Load);
             this.SizeChanged += new System.EventHandler(this.Fiyat_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -150,10 +195,15 @@
         private System.Windows.Forms.DataGridView dgv;
         private System.Windows.Forms.Button button2;
         private MetroFramework.Controls.MetroButton metroButton1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem removeRowToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn urunadi;
         private System.Windows.Forms.DataGridViewTextBoxColumn grup;
-        private System.Windows.Forms.DataGridViewButtonColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn urunadi;
+        private System.Windows.Forms.DataGridViewTextBoxColumn wet_cleaning;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dry_cleaning;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ironing;
         private System.Windows.Forms.DataGridViewImageColumn icon;
+        private System.Windows.Forms.DataGridViewButtonColumn Column4;
     }
 }
