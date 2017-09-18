@@ -12,6 +12,7 @@ namespace KuruTemizleme2
     class SQLClass
     {
         SqlCommand cbisim = new SqlCommand("sp_belirli_sutun_getir");
+        SqlCommand removerow = new SqlCommand("sp_remove_row");
 
         SqlConnection myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ToString());
 
@@ -56,25 +57,36 @@ namespace KuruTemizleme2
             return ismi.ToString();
 
         }
-        public int columnsil(string column)
-        {   SqlParameter urunad = new SqlParameter("@ISIM", SqlDbType.NVarChar,100);
-            SqlCommand columnsil = new SqlCommand("sp_sutun_sil");
-            columnsil.Parameters.Clear();
-            columnsil.CommandType = CommandType.StoredProcedure;
-            columnsil.Connection = myConnection;
-            myConnection.Open();
-            SqlParameter retval = columnsil.Parameters.Add("@SONUC", SqlDbType.VarChar,100);
-            columnsil.Parameters.Add(urunad);
-            retval.Direction = ParameterDirection.Output;
-            urunad.Value = column;
+      
+        public void deleterow(int rowid)
+        {
+            if (myConnection.State == ConnectionState.Closed)
+            { myConnection.Open(); }
+            removerow.Parameters.Clear();
+           removerow.CommandType = CommandType.StoredProcedure;
+            removerow.Connection = myConnection;
+            SqlParameter rownumber = new SqlParameter("@rownumber", SqlDbType.Int); //row to be erased
+              rownumber.Value = rowid;
+              removerow.Parameters.Add(rownumber);
+
+            removerow.ExecuteNonQuery();
+            if (myConnection.State == ConnectionState.Open)
+            { myConnection.Close(); }
 
 
-            columnsil.ExecuteNonQuery();
-            myConnection.Close();
+        }
+        public int rowcountfunc()
+        {
+            if (myConnection.State == ConnectionState.Closed)
+            { myConnection.Open(); }
+            SqlCommand countrow = new SqlCommand("countrow");
+            countrow.CommandType = CommandType.StoredProcedure;
+            countrow.Connection = myConnection;
 
-            return Convert.ToInt32(columnsil.Parameters["@SONUC"].Value);
-
-
+            int i = countrow.ExecuteNonQuery();
+            if (myConnection.State==ConnectionState.Open)
+            { myConnection.Close(); }
+            return i;
         }
         public int columnekle (string column)
         {

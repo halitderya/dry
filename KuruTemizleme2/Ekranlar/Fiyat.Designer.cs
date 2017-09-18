@@ -123,7 +123,6 @@
             this.ID.DataPropertyName = "id";
             this.ID.HeaderText = "ID";
             this.ID.Name = "ID";
-            this.ID.Visible = false;
             // 
             // grup
             // 

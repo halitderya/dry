@@ -18,6 +18,7 @@ namespace KuruTemizleme2.Ekranlar
         SqlCommand upt = new SqlCommand();
         SqlConnection MyConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ConnectionString);
         SqlParameter param = new SqlParameter("@Sira", SqlDbType.Int);
+        
         int rowcount = 0;
         SqlParameter uptparam1 = new SqlParameter("@product", SqlDbType.NVarChar);
         SqlParameter uptparam2 = new SqlParameter("@group", SqlDbType.NVarChar);
@@ -25,7 +26,6 @@ namespace KuruTemizleme2.Ekranlar
         SqlParameter uptparam4 = new SqlParameter("@dry", SqlDbType.Int);
         SqlParameter uptparam5 = new SqlParameter("@iron", SqlDbType.Int);
         SqlParameter uptparam6 = new SqlParameter("@icon", SqlDbType.Image);
-
         private int rowIndex = 0;
         int before, after; //for finding deleted row count
 
@@ -104,6 +104,7 @@ namespace KuruTemizleme2.Ekranlar
             isim.CommandText = "sp_tablo_getir";
             isim.Parameters.Add(param);
             tabloyugetir();
+
         }
 
 
@@ -156,7 +157,6 @@ namespace KuruTemizleme2.Ekranlar
 
         private void button2_Click(object sender, EventArgs e)
         {
-
 
             MessageBox.Show(dgv.Rows.Count.ToString());
 
@@ -212,22 +212,8 @@ namespace KuruTemizleme2.Ekranlar
                         contextMenuStrip1.Show(this.dgv, e.Location);
                         contextMenuStrip1.Show(Cursor.Position);
                     }
-
-
-
-
-
-
+                    
                 }
-
-
-               
-
-
-
-
-              
-
 
                 
             }
@@ -247,23 +233,26 @@ namespace KuruTemizleme2.Ekranlar
                 try
                 {
 
+                    
 
-
-                    before = dgv.RowCount; //finding rowcount before delete
 
                     if (!this.dgv.Rows[this.rowIndex].IsNewRow)
                     {
+                        if (MyConnection.State == ConnectionState.Closed)
+                        { MyConnection.Open(); }
+                        before = sqlclass.rowcountfunc(); //finding rowcount before delete
+
 
                         foreach (DataGridViewRow row in dgv.SelectedRows)
                         {
+                            int a = Convert.ToInt16( dgv.Rows[row.Index].Cells[1].Value);
+                            sqlclass.deleterow(a);
                             dgv.Rows.RemoveAt(row.Index);
-                            after = dgv.RowCount; //finding rowcount after delete
-
-
                         }
 
-
-
+                        after = sqlclass.rowcountfunc();
+                        if (MyConnection.State == ConnectionState.Open)
+                        { MyConnection.Close(); }
 
                     }
                     else {  }
@@ -277,6 +266,7 @@ namespace KuruTemizleme2.Ekranlar
                 finally
                 {
                     MetroFramework.MetroMessageBox.Show(this,(before-after).ToString()+ " Row(s) removed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MyConnection.Close();
 
 
                 }

@@ -107,7 +107,7 @@ namespace KuruTemizleme2.Ekranlar
 
             }
 
-            MessageBox.Show(this, sqlclass.columnsil(targetcolumns).ToString());
+          //  MessageBox.Show(this, sqlclass.columnsil(sira).ToString());
 
 
 
