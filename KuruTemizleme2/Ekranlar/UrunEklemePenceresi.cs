@@ -15,7 +15,8 @@ namespace KuruTemizleme2.Ekranlar
     
     public partial class UrunEklemePenceresi : MetroFramework.Forms.MetroForm
     {
-        
+        MetroTile mcb;
+        string hizmet;
         public int sayi = 0;
         public UrunEklemePenceresi()
         {
@@ -25,25 +26,63 @@ namespace KuruTemizleme2.Ekranlar
 
         private void UrunEklemePenceresi_Load(object sender, EventArgs e)
         {
+
+
+
+
+
             var sqlclass = new SQLClass();
-            //tableLayoutPanel1.RowCount = sqlclass.hizmetsayisi();
-            tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowCount = 1;
-           // RowStyle rs = new RowStyle(SizeType.Percent,(100/sqlclass.hizmetsayisi()));
-            RowStyle rs = new RowStyle(SizeType.Percent, (100 / 1));
+            tableLayoutPanel1.RowCount = sqlclass.hizmetsayisi();
+           // this.tableLayoutPanel1.RowCount = 1;
+            RowStyle rs = new RowStyle(SizeType.Percent, (100 / sqlclass.hizmetsayisi()));
 
             this.tableLayoutPanel1.RowStyles.Add(rs);
-            for (int i=0;i<sqlclass.hizmetsayisi();i++)
+            for (int i = 0; i < sqlclass.hizmetsayisi(); i++)
             {
-                MetroCheckBox mcb = new MetroCheckBox();
-                mcb.Text = sqlclass.cbismi(i);
-                tableLayoutPanel1.Controls.Add(mcb, (i /4) / 4,i /4);
+                  mcb = new MetroTile();
+                  mcb.AutoSizeMode = AutoSizeMode.GrowOnly;
+                  mcb.TextAlign = ContentAlignment.MiddleCenter;
+                  mcb.Click += new System.EventHandler(this.mcb_click);
+                  mcb.Dock = DockStyle.Fill;
+                  mcb.Text = sqlclass.cbismi(i);
                 
+                  //   tableLayoutPanel1.Controls.Add(mcb, (i / 3) /3, i / 3);
+                  tableLayoutPanel1.Controls.Add(mcb);
+
             }
-            
+
 
         }
 
+        private void mcb_click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                var mcb = sender as MetroTile;
+
+                foreach (MetroTile b in this.tableLayoutPanel1.Controls)
+                {
+                    b.UseCustomBackColor = false;
+                    this.Refresh();
+                }
+
+                mcb.UseCustomBackColor = true;
+                mcb.BackColor = Color.Orange;
+                hizmet = mcb.Text;
+            }
+
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "An error occured while choose service: "+ex.Message);
+
+            }
+
+
+
+
+
+        }
         private void metroButton2_Click(object sender, EventArgs e)
         {
             if (sayi > 19)
@@ -84,7 +123,7 @@ namespace KuruTemizleme2.Ekranlar
             if (Convert.ToInt32(metroTile1.Text)>0)
             {
                 var fm = testekrani.MainFormRef;
-                fm.urunekle(metroLabel1.Text,"Yıkalama", Convert.ToInt32(metroTile1.Text), 1);
+                fm.urunekle(metroLabel1.Text,hizmet, Convert.ToInt32(metroTile1.Text), 1);
                 fm.dataGridView1.ColumnHeadersVisible = true;
                 fm.TBTutar.Visible = true;
                 fm.metroLabel2.Visible = true;
