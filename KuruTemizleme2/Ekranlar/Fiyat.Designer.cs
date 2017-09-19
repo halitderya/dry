@@ -36,13 +36,12 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.grup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.product_type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.urunadi = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.wet_cleaning = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dry_cleaning = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ironing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.icon = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -67,16 +66,16 @@
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
-            this.grup,
+            this.product_type,
             this.urunadi,
             this.wet_cleaning,
             this.dry_cleaning,
             this.ironing,
-            this.icon,
-            this.Column4});
+            this.icon});
             this.dgv.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgv.Location = new System.Drawing.Point(20, 60);
             this.dgv.Name = "dgv";
+            this.dgv.RowTemplate.Height = 60;
             this.dgv.Size = new System.Drawing.Size(703, 150);
             this.dgv.TabIndex = 1;
             this.dgv.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellClick);
@@ -123,12 +122,13 @@
             this.ID.DataPropertyName = "id";
             this.ID.HeaderText = "ID";
             this.ID.Name = "ID";
+            this.ID.Visible = false;
             // 
-            // grup
+            // product_type
             // 
-            this.grup.DataPropertyName = "product_type";
-            this.grup.HeaderText = "Service Type";
-            this.grup.Name = "grup";
+            this.product_type.DataPropertyName = "product_type";
+            this.product_type.HeaderText = "Service Type";
+            this.product_type.Name = "product_type";
             // 
             // urunadi
             // 
@@ -161,13 +161,6 @@
             this.icon.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
             this.icon.Name = "icon";
             // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Add";
-            this.Column4.Name = "Column4";
-            this.Column4.Text = "Browse...";
-            this.Column4.Visible = false;
-            // 
             // Fiyat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -197,12 +190,11 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem removeRowToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn grup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn product_type;
         private System.Windows.Forms.DataGridViewTextBoxColumn urunadi;
         private System.Windows.Forms.DataGridViewTextBoxColumn wet_cleaning;
         private System.Windows.Forms.DataGridViewTextBoxColumn dry_cleaning;
         private System.Windows.Forms.DataGridViewTextBoxColumn ironing;
         private System.Windows.Forms.DataGridViewImageColumn icon;
-        private System.Windows.Forms.DataGridViewButtonColumn Column4;
     }
 }

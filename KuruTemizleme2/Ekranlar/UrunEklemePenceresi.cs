@@ -26,17 +26,19 @@ namespace KuruTemizleme2.Ekranlar
         private void UrunEklemePenceresi_Load(object sender, EventArgs e)
         {
             var sqlclass = new SQLClass();
-            tableLayoutPanel1.RowCount = sqlclass.hizmetsayisi();
+            //tableLayoutPanel1.RowCount = sqlclass.hizmetsayisi();
+            tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowCount = 1;
-            RowStyle rs = new RowStyle(SizeType.Percent,(100/sqlclass.hizmetsayisi()));
+           // RowStyle rs = new RowStyle(SizeType.Percent,(100/sqlclass.hizmetsayisi()));
+            RowStyle rs = new RowStyle(SizeType.Percent, (100 / 1));
+
             this.tableLayoutPanel1.RowStyles.Add(rs);
             for (int i=0;i<sqlclass.hizmetsayisi();i++)
             {
                 MetroCheckBox mcb = new MetroCheckBox();
                 mcb.Text = sqlclass.cbismi(i);
                 tableLayoutPanel1.Controls.Add(mcb, (i /4) / 4,i /4);
-
-
+                
             }
             
 

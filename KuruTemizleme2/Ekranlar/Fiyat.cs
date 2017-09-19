@@ -16,6 +16,9 @@ namespace KuruTemizleme2.Ekranlar
         SQLClass sqlclass = new SQLClass();
         SqlCommand isim = new SqlCommand();
         SqlCommand upt = new SqlCommand();
+        SqlDataAdapter da = new SqlDataAdapter(); //Datatable and dataset made public for update to DB
+        DataSet ds = new DataSet(); //Datatable and dataset made public for update to DB
+
         SqlConnection MyConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ConnectionString);
         SqlParameter param = new SqlParameter("@Sira", SqlDbType.Int);
         
@@ -30,10 +33,10 @@ namespace KuruTemizleme2.Ekranlar
         int before, after; //for finding deleted row count
 
 
-        List<SqlParameter> prm = new List<SqlParameter>()
- {
+ //       List<SqlParameter> prm = new List<SqlParameter>()
+ //{
 
- };
+ //};
 
 
 
@@ -53,38 +56,22 @@ namespace KuruTemizleme2.Ekranlar
 
         private void Kaydet(object sender, EventArgs e)
         {
-            rowcount = dgv.RowCount;
-            upt.Parameters.Clear();
-            upt.CommandType = CommandType.StoredProcedure;
-            upt.Connection = MyConnection;
-            upt.CommandText = "sp_tablo_insert_or_update";
-            
 
-            upt.Parameters.Add(uptparam1);
-            upt.Parameters.Add(uptparam2);
-            upt.Parameters.Add(uptparam3);
-            upt.Parameters.Add(uptparam4);
-            upt.Parameters.Add(uptparam5);
-            upt.Parameters.Add(uptparam6);
-
-            if (MyConnection.State == ConnectionState.Closed)
-            { MyConnection.Open(); }
-            for (int h=0; h<rowcount-1;h++)
+            try 
             {
-                uptparam1.Value = dgv.Rows[h].Cells["product_name"].Value.ToString();
-                uptparam2.Value = dgv.Rows[h].Cells["product_type"].Value.ToString();
-                uptparam3.Value = dgv.Rows[h].Cells["wet_cleaning"].Value;
-                uptparam4.Value = dgv.Rows[h].Cells["dry_cleaning"].Value;
-                uptparam5.Value = dgv.Rows[h].Cells["ironing"].Value;
-                uptparam6.Value = dgv.Rows[h].Cells["icon"].Value;
-                upt.ExecuteNonQuery();
+                SqlCommandBuilder cmdBuilder = new SqlCommandBuilder(da); // created a commandbuilder work with dataadapter "da"
+                cmdBuilder.GetUpdateCommand();
+                da.Update(ds); // ds was filled by db thru dgv
+               
+            }
 
+                catch(Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "An error occured while updating price list. Detailed information= " +  ex.Message);
             }
 
 
-            if (MyConnection.State == ConnectionState.Open)
-            { MyConnection.Close(); }
-
+     
 
 
 
@@ -103,26 +90,27 @@ namespace KuruTemizleme2.Ekranlar
             isim.Connection = MyConnection;
             isim.CommandText = "sp_tablo_getir";
             isim.Parameters.Add(param);
+
             tabloyugetir();
 
         }
 
 
 
-        private void tabloyugetir()
+        private void tabloyugetir() // triggered by load event. Fills datagridview
 
 
         {
+
             MyConnection.Open();
             param.Value = 0;
-            SqlDataAdapter da = new SqlDataAdapter(isim);
-            var ds = new DataSet();
+            da.SelectCommand=isim;
             da.Fill(ds);
             dgv.DataSource = ds.Tables[0];
             dgv.Dock = DockStyle.Top;
             this.Controls.Add(dgv);
             MyConnection.Close();
-
+        
 
 
 
@@ -167,14 +155,15 @@ namespace KuruTemizleme2.Ekranlar
 
         private void dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() == typeof(DataGridViewImageCell))
+            if (dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() == typeof(DataGridViewImageCell)) //checks is clicked cell imagecell
             {
                 OpenFileDialog opf = new OpenFileDialog();
-                opf.Filter = "Tüm Desteklenen Dosya Türleri | *.jpg; *.png; *.tiff ";
+                opf.Filter = "All Supported File Types | *.jpg; *.png; *.tiff ";
 
 
                 if (opf.ShowDialog() == DialogResult.OK)
                 {
+
                     dgv.Rows[e.RowIndex].Cells["icon"].Value = Image.FromFile(opf.FileName);
 
                 }
@@ -205,12 +194,12 @@ namespace KuruTemizleme2.Ekranlar
                     DataGridViewRow selectedRow = dgv.Rows[selectedrowindex];
 
 
-                    if (Convert.ToString(selectedRow.Cells["urunadi"].Value).Length>0) // check if row empty or not
+                    if (Convert.ToString(selectedRow.Cells["urunadi"].Value).Length>0) // check is row empty or not
                     {
                         dgv.Rows[e.RowIndex].Selected = true;
                         rowIndex = e.RowIndex;
-                        contextMenuStrip1.Show(this.dgv, e.Location);
-                        contextMenuStrip1.Show(Cursor.Position);
+                        contextMenuStrip1.Show(this.dgv, e.Location); //brings menustrip to current cursor location
+                        contextMenuStrip1.Show(Cursor.Position); //brings menustrip to current cursor location
                     }
                     
                 }
@@ -240,19 +229,24 @@ namespace KuruTemizleme2.Ekranlar
                     {
                         if (MyConnection.State == ConnectionState.Closed)
                         { MyConnection.Open(); }
-                        before = sqlclass.rowcountfunc(); //finding rowcount before delete
+                        before = sqlclass.rowcountfunc(); //finding rowcount from sqlclass before delete
 
 
                         foreach (DataGridViewRow row in dgv.SelectedRows)
                         {
-                            int a = Convert.ToInt16( dgv.Rows[row.Index].Cells[1].Value);
-                            sqlclass.deleterow(a);
-                            dgv.Rows.RemoveAt(row.Index);
+                            int a = Convert.ToInt16( dgv.Rows[row.Index].Cells[1].Value);//finding id number selected row each 
+                            sqlclass.deleterow(a); // removes selected row in DB
+                            dgv.Rows.RemoveAt(row.Index); //removes selected row in DGV only.
+                           
+
+
+
+
                         }
 
                         after = sqlclass.rowcountfunc();
                         if (MyConnection.State == ConnectionState.Open)
-                        { MyConnection.Close(); }
+                        { MyConnection.Close(); } //finding rowcount from sqlclass after delete
 
                     }
                     else {  }
@@ -267,6 +261,10 @@ namespace KuruTemizleme2.Ekranlar
                 {
                     MetroFramework.MetroMessageBox.Show(this,(before-after).ToString()+ " Row(s) removed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     MyConnection.Close();
+                    ds.Clear();
+                    dgv.Update();
+                    dgv.Refresh();
+                    tabloyugetir();
 
 
                 }

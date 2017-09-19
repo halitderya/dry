@@ -13,6 +13,7 @@ namespace KuruTemizleme2
     {
         SqlCommand cbisim = new SqlCommand("sp_belirli_sutun_getir");
         SqlCommand removerow = new SqlCommand("sp_remove_row");
+        SqlCommandBuilder cmdbl;
 
         SqlConnection myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ToString());
 
@@ -57,8 +58,14 @@ namespace KuruTemizleme2
             return ismi.ToString();
 
         }
+        private void sendchanges()
+        {
+            cmdbl = new SqlCommandBuilder();
+            
+               
+        }
       
-        public void deleterow(int rowid)
+        public void deleterow(int rowid) // deletes row when parameters met
         {
             if (myConnection.State == ConnectionState.Closed)
             { myConnection.Open(); }
@@ -75,20 +82,19 @@ namespace KuruTemizleme2
 
 
         }
-        public int rowcountfunc()
+        public int rowcountfunc() // counts row count when needed and returns to i 
         {
             if (myConnection.State == ConnectionState.Closed)
             { myConnection.Open(); }
             SqlCommand countrow = new SqlCommand("countrow");
             countrow.CommandType = CommandType.StoredProcedure;
             countrow.Connection = myConnection;
-
-            int i = countrow.ExecuteNonQuery();
+            Int32 i = (Int32)countrow.ExecuteScalar();
             if (myConnection.State==ConnectionState.Open)
             { myConnection.Close(); }
             return i;
         }
-        public int columnekle (string column)
+        public int columnekle (string column) //unusable
         {
             SqlCommand columnekle = new SqlCommand("sp_sutun_ekle");
             columnekle.Parameters.Clear();

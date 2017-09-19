@@ -56,13 +56,13 @@ namespace KuruTemizleme2.Ekranlar
                 intd = Math.Floor(intd / ColumnCount);
                 MetroTile ml = new MetroTile();
                 ml.Size = new Size(tilesizex- (MP.Size.Width / 100), tilesizey- (MP.Size.Width / 100));
-                ml.Text = dt.Rows[i][1].ToString();
+                ml.Text = dt.Rows[i][2].ToString();
                 byte[] data = new byte[0];
                 ml.Name = "tile" + i.ToString();
 
                 ml.Click += new EventHandler(Ml_Click); //burada icon var mı diye kontrol ediliyor
-                if (dt.Rows[i][5] != DBNull.Value)
-                {   MemoryStream ms = new MemoryStream((byte[])(dt.Rows[i][5]));
+                if (dt.Rows[i][6] != DBNull.Value)
+                {   MemoryStream ms = new MemoryStream((byte[])(dt.Rows[i][6]));
                     ikon = Image.FromStream(ms);
                     Bitmap bit = new Bitmap(ikon,ml.Size.Width/2,ml.Size.Width/2);
                     ml.TileImageAlign = ContentAlignment.TopRight;

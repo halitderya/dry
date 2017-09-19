@@ -25,7 +25,7 @@ namespace KuruTemizleme2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
         public int TilePerPage {
             get {
                 return ((int)(this["TilePerPage"]));
