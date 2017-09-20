@@ -96,17 +96,33 @@ namespace KuruTemizleme2
         }
         public int columnekle (string column) //unusable
         {
-            SqlCommand columnekle = new SqlCommand("sp_sutun_ekle");
+            SqlCommand columnekle = new SqlCommand("sp_column_ekle");
             columnekle.Parameters.Clear();
             columnekle.CommandType = CommandType.StoredProcedure;
             columnekle.Connection = myConnection;
-            SqlParameter urunad = new SqlParameter("@ISIM", SqlDbType.NVarChar);
+            SqlParameter urunad = new SqlParameter("@SERVICE", SqlDbType.NVarChar);
             myConnection.Open();
             urunad.Value = column;
             columnekle.Parameters.Add(urunad);
             int affectedrows = Convert.ToInt16( columnekle.ExecuteNonQuery());
             myConnection.Close();
             return affectedrows;
+        }
+       
+        public int columnsil (string column)
+        {
+            SqlCommand columnsil = new SqlCommand("sp_column_sil");
+            columnsil.Parameters.Clear();
+            columnsil.CommandType = CommandType.StoredProcedure;
+            columnsil.Connection = myConnection;
+            SqlParameter columnturn = new SqlParameter("@SERVICE", SqlDbType.NVarChar);
+            if(myConnection.State==ConnectionState.Closed)
+            { myConnection.Open();}
+
+            int affectedcolumn = Convert.ToInt16(columnsil.ExecuteScalar().ToString());
+            if(myConnection.State==ConnectionState.Open)
+            { myConnection.Close(); }
+            return affectedcolumn;
         }
     }
 }

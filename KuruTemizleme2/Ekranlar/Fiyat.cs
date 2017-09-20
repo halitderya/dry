@@ -176,8 +176,8 @@ namespace KuruTemizleme2.Ekranlar
 
         private void metroButton1_Click(object sender, EventArgs e)
         {
-
-
+            SutunEkleSil stn = new SutunEkleSil();
+            stn.Show();
             
         }
 

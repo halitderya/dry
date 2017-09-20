@@ -98,19 +98,15 @@ namespace KuruTemizleme2.Ekranlar
                     else
                     {
                         targetcolumns = targetcolumns + " , " + checkBox.Text;
-
                     }
 
                 }
 
+                
 
 
             }
-
-          //  MessageBox.Show(this, sqlclass.columnsil(sira).ToString());
-
-
-
+                   MessageBox.Show(this, sqlclass.columnsil(targetcolumns).ToString());
         }
 
         private void metroButton3_Click(object sender, EventArgs e)
