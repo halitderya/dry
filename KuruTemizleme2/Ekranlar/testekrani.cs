@@ -39,47 +39,52 @@ namespace KuruTemizleme2.Ekranlar
         }
         private void TileDose(int sayisi)
         {
-            SqlCommand isim = new SqlCommand();
-            isim.CommandType = CommandType.StoredProcedure;
-            isim.Connection = myConnection;
-            isim.CommandText = "sp_tileadi_getir";
-            tilesayisi();
-            myConnection.Open();
-            DataTable dt = new DataTable();
-            dt.Load(isim.ExecuteReader());
-
-            if (myConnection.State==ConnectionState.Closed)
-            { myConnection.Open(); }
-            for (int i = 0; i < sayisi; i++)
+            try
             {
-                intd = Convert.ToDouble(i);
-                intd = Math.Floor(intd / ColumnCount);
-                MetroTile ml = new MetroTile();
-                ml.Size = new Size(tilesizex- (MP.Size.Width / 100), tilesizey- (MP.Size.Width / 100));
-                ml.Text = dt.Rows[i][2].ToString();
-                byte[] data = new byte[0];
-                ml.Name = "tile" + i.ToString();
+                SqlCommand isim = new SqlCommand();
+                isim.CommandType = CommandType.StoredProcedure;
+                isim.Connection = myConnection;
+                isim.CommandText = "sp_tileadi_getir";
+                tilesayisi();
+                myConnection.Open();
+                DataTable dt = new DataTable();
+                dt.Load(isim.ExecuteReader());
 
-                ml.Click += new EventHandler(Ml_Click); //burada icon var mı diye kontrol ediliyor
-                if (dt.Rows[i][6] != DBNull.Value)
-                {   MemoryStream ms = new MemoryStream((byte[])(dt.Rows[i][6]));
-                    ikon = Image.FromStream(ms);
-                    Bitmap bit = new Bitmap(ikon,ml.Size.Width/2,ml.Size.Width/2);
-                    ml.TileImageAlign = ContentAlignment.TopRight;
-                    ml.TileImage = bit;
-                    ml.UseTileImage = true;
+                if (myConnection.State == ConnectionState.Closed)
+                { myConnection.Open(); }
+                for (int i = 0; i < sayisi; i++)
+                {
+                    intd = Convert.ToDouble(i);
+                    intd = Math.Floor(intd / ColumnCount);
+                    MetroTile ml = new MetroTile();
+                    ml.Size = new Size(tilesizex - (MP.Size.Width / 100), tilesizey - (MP.Size.Width / 100));
+                    ml.Text = dt.Rows[i][2].ToString();
+                    byte[] data = new byte[0];
+                    ml.Name = "tile" + i.ToString();
 
+                    ml.Click += new EventHandler(Ml_Click); //burada icon var mı diye kontrol ediliyor
+                    if (dt.Rows[i][6] != DBNull.Value)
+                    {
+                        MemoryStream ms = new MemoryStream((byte[])(dt.Rows[i][6]));
+                        ikon = Image.FromStream(ms);
+                        Bitmap bit = new Bitmap(ikon, ml.Size.Width / 2, ml.Size.Width / 2);
+                        ml.TileImageAlign = ContentAlignment.TopRight;
+                        ml.TileImage = bit;
+                        ml.UseTileImage = true;
+
+
+                    }
+
+                    ml.Location = new Point(((i % ColumnCount) * ml.Size.Width) + ((i % ColumnCount) * (MP.Size.Width / 100)), Convert.ToInt32(intd) * ml.Size.Width + ((Convert.ToInt32(intd)) * (MP.Size.Width / 100)));
+                    this.MP.Controls.Add(ml);
+                    MP.AutoScroll = true;
 
                 }
-
-                ml.Location = new Point(((i % ColumnCount) * ml.Size.Width)+((i % ColumnCount)*(MP.Size.Width/100)) , Convert.ToInt32(intd) * ml.Size.Width+((Convert.ToInt32(intd)) * (MP.Size.Width / 100)));
-                this.MP.Controls.Add(ml);
-                MP.AutoScroll = true;
-
+                if (myConnection.State == ConnectionState.Open)
+                { myConnection.Close(); }
+                resize();
             }
-            if (myConnection.State == ConnectionState.Open)
-            { myConnection.Close(); }
-            resize();
+            catch (Exception ex){ MetroFramework.MetroMessageBox.Show(this, "An Error Occured= " + ex.Message); }
         }
 
         private void Ml_Click(object sender, EventArgs e)
@@ -114,6 +119,7 @@ namespace KuruTemizleme2.Ekranlar
             tilesayisi();
             TileDose(sayisi);
             MP.AutoScroll = true;
+            metroTile2.Text = "Close";
             
         }
         private void resize()
@@ -141,35 +147,28 @@ namespace KuruTemizleme2.Ekranlar
 
         public void urunekle (string adi,string hizmet,int fiyat,int adet)
         {
+
             Image img = Properties.Resources.delete_16x16;
             this.dataGridView1.Rows.Add(adi, hizmet,fiyat, adet,img);
-            
-
+            if (dataGridView1.RowCount > 0)
+            { metroTile2.Text = "Clear"; }
 
 
         }
 
-        private void metroTile1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() == typeof(DataGridViewImageCell))
             {
                 dataGridView1.Rows.RemoveAt(e.RowIndex);
-                if (dataGridView1.Rows.Count==0) { dataGridView1.ColumnHeadersVisible = false; }
+                if (dataGridView1.Rows.Count==0) { dataGridView1.ColumnHeadersVisible = false; metroTile2.Text = "Close";  }
             }
             
 
         }
-
-        private void metroTile2_Click(object sender, EventArgs e)
-        {
-            this.dataGridView1.Rows.Clear();
-            dataGridView1.ColumnHeadersVisible = false;
-        }
+        
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -184,6 +183,29 @@ namespace KuruTemizleme2.Ekranlar
             
 
 
+        }
+
+        private void CloseorClear(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void metroTile2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void click_basket(object sender, EventArgs e)
+        {
+            if (dataGridView1.RowCount == 0)
+            { this.Close(); }
+            if (dataGridView1.RowCount > 0)
+            {
+                this.dataGridView1.Rows.Clear();
+                dataGridView1.ColumnHeadersVisible = false;
+                metroTile2.Text = "Close";
+
+            }
         }
     }
 }

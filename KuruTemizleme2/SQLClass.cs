@@ -101,11 +101,19 @@ namespace KuruTemizleme2
             columnekle.CommandType = CommandType.StoredProcedure;
             columnekle.Connection = myConnection;
             SqlParameter urunad = new SqlParameter("@SERVICE", SqlDbType.NVarChar);
-            myConnection.Open();
+
+
+            if (myConnection.State == ConnectionState.Closed)
+            { myConnection.Open(); }
+
+
             urunad.Value = column;
             columnekle.Parameters.Add(urunad);
             int affectedrows = Convert.ToInt16( columnekle.ExecuteNonQuery());
-            myConnection.Close();
+
+
+            if (myConnection.State == ConnectionState.Open)
+            { myConnection.Close(); }
             return affectedrows;
         }
        
@@ -116,10 +124,17 @@ namespace KuruTemizleme2
             columnsil.CommandType = CommandType.StoredProcedure;
             columnsil.Connection = myConnection;
             SqlParameter columnturn = new SqlParameter("@SERVICE", SqlDbType.NVarChar);
+
+
             if(myConnection.State==ConnectionState.Closed)
             { myConnection.Open();}
 
-            int affectedcolumn = Convert.ToInt16(columnsil.ExecuteScalar().ToString());
+
+            columnturn.Value = column;
+            columnsil.Parameters.Add(columnturn);
+            int affectedcolumn = Convert.ToInt16(columnsil.ExecuteNonQuery());
+
+
             if(myConnection.State==ConnectionState.Open)
             { myConnection.Close(); }
             return affectedcolumn;

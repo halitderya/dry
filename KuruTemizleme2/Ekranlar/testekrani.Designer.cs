@@ -108,9 +108,8 @@
             this.metroTile2.Size = new System.Drawing.Size(100, 128);
             this.metroTile2.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTile2.TabIndex = 2;
-            this.metroTile2.Text = "Empty Basket";
             this.metroTile2.UseSelectable = true;
-            this.metroTile2.Click += new System.EventHandler(this.metroTile2_Click);
+            this.metroTile2.Click += new System.EventHandler(this.click_basket);
             // 
             // MP
             // 
@@ -140,7 +139,6 @@
             this.metroTile1.TabIndex = 1;
             this.metroTile1.Text = "Proceed";
             this.metroTile1.UseSelectable = true;
-            this.metroTile1.Click += new System.EventHandler(this.metroTile1_Click);
             // 
             // dataGridView1
             // 
