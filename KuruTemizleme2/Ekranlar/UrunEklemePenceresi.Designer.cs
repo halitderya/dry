@@ -75,11 +75,12 @@
             // 
             // metroButton3
             // 
+            this.metroButton3.Enabled = false;
             this.metroButton3.Location = new System.Drawing.Point(145, 507);
             this.metroButton3.Name = "metroButton3";
             this.metroButton3.Size = new System.Drawing.Size(158, 39);
             this.metroButton3.TabIndex = 3;
-            this.metroButton3.Text = "Ekle";
+            this.metroButton3.Text = "Add";
             this.metroButton3.UseSelectable = true;
             this.metroButton3.Click += new System.EventHandler(this.metroButton3_Click);
             // 
@@ -123,7 +124,7 @@
             this.Controls.Add(this.metroButton1);
             this.Name = "UrunEklemePenceresi";
             this.Resizable = false;
-            this.Text = "Sepete Ekle...";
+            this.Text = "Add to Basket...";
             this.Load += new System.EventHandler(this.UrunEklemePenceresi_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

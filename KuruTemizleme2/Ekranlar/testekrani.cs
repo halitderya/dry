@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
-
+using MetroFramework;
 
 namespace KuruTemizleme2.Ekranlar
 {
@@ -16,8 +16,8 @@ namespace KuruTemizleme2.Ekranlar
         public static testekrani MainFormRef { get; private set; }
 
         MetroTabControl MTC = new MetroTabControl();
-        
-        Image ikon ;
+
+        Image ikon;
         public Size sz = new Size();
         double intd;
         public int ColumnCount = Properties.Settings.Default.TilePerPage;
@@ -29,6 +29,8 @@ namespace KuruTemizleme2.Ekranlar
         public int tilesizey = 0;
         public int tilemarginx = 0;
         public int tilemarginy = 0;
+
+        bool isexist = false;
         SqlConnection myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ToString());
         public testekrani()
         {
@@ -84,7 +86,7 @@ namespace KuruTemizleme2.Ekranlar
                 { myConnection.Close(); }
                 resize();
             }
-            catch (Exception ex){ MetroFramework.MetroMessageBox.Show(this, "An Error Occured= " + ex.Message); }
+            catch (Exception ex) { MetroFramework.MetroMessageBox.Show(this, "An Error Occured= " + ex.Message); }
         }
 
         private void Ml_Click(object sender, EventArgs e)
@@ -101,10 +103,10 @@ namespace KuruTemizleme2.Ekranlar
             numara.CommandType = CommandType.StoredProcedure;
             numara.CommandText = "sp_tilesayisi_getir";
             numara.Connection = myConnection;
-            if(myConnection.State==ConnectionState.Closed)
+            if (myConnection.State == ConnectionState.Closed)
             { myConnection.Open(); }
-             sayisi = Convert.ToInt32(numara.ExecuteScalar()); //burdaki sayi kaç adet hizmet olduğu toplamda
-            
+            sayisi = Convert.ToInt32(numara.ExecuteScalar()); //burdaki sayi kaç adet hizmet olduğu toplamda
+
             if (myConnection.State == System.Data.ConnectionState.Open)
             { myConnection.Close(); }
         }
@@ -120,7 +122,7 @@ namespace KuruTemizleme2.Ekranlar
             TileDose(sayisi);
             MP.AutoScroll = true;
             metroTile2.Text = "Close";
-            
+
         }
         private void resize()
         {
@@ -130,7 +132,7 @@ namespace KuruTemizleme2.Ekranlar
             tilesizey = tilesizex;
         }
         private void testekrani_SizeChanged(object sender, EventArgs e)
-        { 
+        {
             this.MP.Controls.Clear();
             resize();
             tilesayisi();
@@ -145,18 +147,60 @@ namespace KuruTemizleme2.Ekranlar
         {
         }
 
-        public void urunekle (string adi,string hizmet,int fiyat,int adet)
+        public void urunekle(string adi, string hizmet, int fiyat, int adet)
         {
-
             Image img = Properties.Resources.delete_16x16;
-            this.dataGridView1.Rows.Add(adi, hizmet,fiyat, adet,img);
-            if (dataGridView1.RowCount > 0)
-            { metroTile2.Text = "Clear"; }
 
+            try
+            {
+                foreach (DataGridViewRow rowy in dataGridView1.Rows)
+                {
+                    if ((Convert.ToString(rowy.Cells[1].Value) == hizmet) && (Convert.ToString(rowy.Cells[0].Value) == adi))
+                    {
+                        rowy.Cells[2].Value = Convert.ToInt16(rowy.Cells[2].Value)+adet;
+
+                        isexist = true;
+                    }
+
+
+                }
+                if (isexist ==true)
+                {
+
+                    
+                    //MessageBox.Show(this, "aynısından bir tane var");
+
+                    isexist =false;
+                   
+
+
+
+                }
+                else
+                {
+                    this.dataGridView1.Rows.Add(adi, hizmet, fiyat, adet, img);
+
+                }
+
+                if (dataGridView1.RowCount > 0)
+                { metroTile2.Text = "Clear"; }
+
+
+            }
+            catch (Exception ex)
+            {
+                MetroMessageBox.Show(this, "An error occured while adding product" + ex.Message);
+            }
 
         }
 
 
+        private void updatequantity()
+        {
+            
+              
+            
+        }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {

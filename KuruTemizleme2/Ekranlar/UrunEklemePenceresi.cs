@@ -37,7 +37,7 @@ namespace KuruTemizleme2.Ekranlar
             RowStyle rs = new RowStyle(SizeType.Percent, (100 / sqlclass.hizmetsayisi()));
 
             this.tableLayoutPanel1.RowStyles.Add(rs);
-            for (int i = 0; i < sqlclass.hizmetsayisi(); i++)
+            for (int i = 0; i < sqlclass.hizmetsayisi(); i++) //this loop cascading mcb buttons according service value
             {
                   mcb = new MetroTile();
                   mcb.AutoSizeMode = AutoSizeMode.GrowOnly;
@@ -48,20 +48,21 @@ namespace KuruTemizleme2.Ekranlar
                 
                   //   tableLayoutPanel1.Controls.Add(mcb, (i / 3) /3, i / 3);
                   tableLayoutPanel1.Controls.Add(mcb);
+                  
 
             }
 
 
         }
 
-        private void mcb_click(object sender, EventArgs e)
+        private void mcb_click(object sender, EventArgs e) //by mcb buttons user decides which services are selected 
         {
 
             try
             {
                 var mcb = sender as MetroTile;
 
-                foreach (MetroTile b in this.tableLayoutPanel1.Controls)
+                foreach (MetroTile b in this.tableLayoutPanel1.Controls) //tile color dont changes till usecustombackcolor property value is true. 
                 {
                     b.UseCustomBackColor = false;
                     this.Refresh();
@@ -70,6 +71,8 @@ namespace KuruTemizleme2.Ekranlar
                 mcb.UseCustomBackColor = true;
                 mcb.BackColor = Color.Orange;
                 hizmet = mcb.Text;
+
+                if (Convert.ToInt32(metroTile1.Text) > 0) metroButton3.Enabled = true;
             }
 
             catch (Exception ex)
@@ -85,13 +88,19 @@ namespace KuruTemizleme2.Ekranlar
         }
         private void metroButton2_Click(object sender, EventArgs e)
         {
-            if (sayi > 19)
+            if (sayi > 99)
             { }
             else
             {
                 
                 sayi++;
                 metroTile1.Text = sayi.ToString();
+                if (Convert.ToInt32(metroTile1.Text) > 0 && hizmet != null)
+                {
+                    metroButton3.Enabled = true;
+                }
+                else
+                { metroButton3.Enabled = false; }
             }
 
         }
@@ -103,7 +112,13 @@ namespace KuruTemizleme2.Ekranlar
             else{
                 sayi--;
                 metroTile1.Text = sayi.ToString();
+                if (Convert.ToInt32(metroTile1.Text) > 0 && hizmet != null) { metroButton3.Enabled = true; }
+                else
+                {
+                    metroButton3.Enabled = false;
+                }
             }
+            
         }
 
 
@@ -116,20 +131,27 @@ namespace KuruTemizleme2.Ekranlar
 
         private void metroButton3_Click(object sender, EventArgs e)
         {
-
-
-
-
-            if (Convert.ToInt32(metroTile1.Text)>0)
+            try
             {
-                var fm = testekrani.MainFormRef;
-                fm.urunekle(metroLabel1.Text,hizmet, Convert.ToInt32(metroTile1.Text), 1);
-                fm.dataGridView1.ColumnHeadersVisible = true;
-                fm.TBTutar.Visible = true;
-                fm.metroLabel2.Visible = true;
-                this.Close();
+                if (Convert.ToInt32(metroTile1.Text) > 0)
+                {
+                    var fm = testekrani.MainFormRef;
+                    fm.urunekle(metroLabel1.Text, hizmet, 1, Convert.ToInt32(metroTile1.Text));
+                    fm.dataGridView1.ColumnHeadersVisible = true;
+                    fm.TBTutar.Visible = true;
+                    fm.metroLabel2.Visible = true;
+                    this.Close();
+                }
+                else { MetroFramework.MetroMessageBox.Show(testekrani.MainFormRef, "Quantity must be selected", "Quantity not selected", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+
             }
-            else {MetroFramework.MetroMessageBox.Show(testekrani.MainFormRef, "En az bir adet ürün seçmelisiniz","Adet Seçilmedi",MessageBoxButtons.OK,MessageBoxIcon.Information); }
+            catch (Exception ex)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "An Error Occured Details:" + ex.Message);
+            }
+
+
+
 
 
         }
