@@ -61,6 +61,8 @@ namespace KuruTemizleme2.Ekranlar
                     MetroTile ml = new MetroTile();
                     ml.Size = new Size(tilesizex - (MP.Size.Width / 100), tilesizey - (MP.Size.Width / 100));
                     ml.Text = dt.Rows[i][2].ToString();
+                    ml.TileTextFontSize = MetroTileTextSize.Tall;
+                    ml.TileTextFontWeight = MetroTileTextWeight.Bold;
                     byte[] data = new byte[0];
                     ml.Name = "tile" + i.ToString();
 
@@ -70,9 +72,11 @@ namespace KuruTemizleme2.Ekranlar
                         MemoryStream ms = new MemoryStream((byte[])(dt.Rows[i][6]));
                         ikon = Image.FromStream(ms);
                         Bitmap bit = new Bitmap(ikon, ml.Size.Width / 2, ml.Size.Width / 2);
+
                         ml.TileImageAlign = ContentAlignment.TopRight;
                         ml.TileImage = bit;
                         ml.UseTileImage = true;
+
 
 
                     }
@@ -112,6 +116,7 @@ namespace KuruTemizleme2.Ekranlar
         }
         private void testekrani_Load(object sender, EventArgs e)
         {
+
             this.dataGridView1.BackgroundColor = this.BackColor;
             this.dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Single;
             dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -122,6 +127,7 @@ namespace KuruTemizleme2.Ekranlar
             TileDose(sayisi);
             MP.AutoScroll = true;
             metroTile2.Text = "Close";
+            this.WindowState = FormWindowState.Maximized;
 
         }
         private void resize()
@@ -147,7 +153,7 @@ namespace KuruTemizleme2.Ekranlar
         {
         }
 
-        public void urunekle(string adi, string hizmet, int fiyat, int adet)
+        public void urunekle(string adi, string hizmet, int adet, int fiyat)
         {
             Image img = Properties.Resources.delete_16x16;
 
@@ -155,10 +161,11 @@ namespace KuruTemizleme2.Ekranlar
             {
                 foreach (DataGridViewRow rowy in dataGridView1.Rows)
                 {
+
                     if ((Convert.ToString(rowy.Cells[1].Value) == hizmet) && (Convert.ToString(rowy.Cells[0].Value) == adi))
                     {
-                        rowy.Cells[2].Value = Convert.ToInt16(rowy.Cells[2].Value)+adet;
-
+                        rowy.Cells[2].Value = Convert.ToInt16(rowy.Cells[2].Value) + adet;
+                        rowy.Cells[4].Value = Convert.ToInt16(rowy.Cells[2].Value) * (Convert.ToInt16(rowy.Cells[3].Value));
                         isexist = true;
                     }
 
@@ -178,7 +185,7 @@ namespace KuruTemizleme2.Ekranlar
                 }
                 else
                 {
-                    this.dataGridView1.Rows.Add(adi, hizmet, fiyat, adet, img);
+                    this.dataGridView1.Rows.Add(adi, hizmet, adet, fiyat,fiyat*adet ,img);
 
                 }
 
@@ -223,7 +230,7 @@ namespace KuruTemizleme2.Ekranlar
         private void fiyatyukle (string urun, string hizmet)
         {
             var sqlclass = new SQLClass();
-            sqlclass.fiyat(urun, hizmet);
+            sqlclass.getprice(urun, hizmet);
             
 
 

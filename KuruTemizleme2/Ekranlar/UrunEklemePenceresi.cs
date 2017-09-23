@@ -15,6 +15,7 @@ namespace KuruTemizleme2.Ekranlar
     
     public partial class UrunEklemePenceresi : MetroFramework.Forms.MetroForm
     {
+
         MetroTile mcb;
         string hizmet;
         public int sayi = 0;
@@ -27,11 +28,11 @@ namespace KuruTemizleme2.Ekranlar
         private void UrunEklemePenceresi_Load(object sender, EventArgs e)
         {
 
-
-
-
-
             var sqlclass = new SQLClass();
+
+
+
+
             tableLayoutPanel1.RowCount = sqlclass.hizmetsayisi();
            // this.tableLayoutPanel1.RowCount = 1;
             RowStyle rs = new RowStyle(SizeType.Percent, (100 / sqlclass.hizmetsayisi()));
@@ -135,8 +136,10 @@ namespace KuruTemizleme2.Ekranlar
             {
                 if (Convert.ToInt32(metroTile1.Text) > 0)
                 {
+                    var sqlclass = new SQLClass();
+                    int price= sqlclass.getprice(metroLabel1.Text.ToString(), hizmet);
                     var fm = testekrani.MainFormRef;
-                    fm.urunekle(metroLabel1.Text, hizmet, 1, Convert.ToInt32(metroTile1.Text));
+                    fm.urunekle(metroLabel1.Text, hizmet,Convert.ToInt32(metroTile1.Text),price);
                     fm.dataGridView1.ColumnHeadersVisible = true;
                     fm.TBTutar.Visible = true;
                     fm.metroLabel2.Visible = true;

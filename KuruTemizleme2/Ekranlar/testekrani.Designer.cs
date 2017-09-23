@@ -28,16 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.metroTile2 = new MetroFramework.Controls.MetroTile();
             this.MP = new MetroFramework.Controls.MetroPanel();
             this.metroTile1 = new MetroFramework.Controls.MetroTile();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.urun = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hizmet = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.adet = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fiyat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.sil = new System.Windows.Forms.DataGridViewImageColumn();
             this.metroPanel1 = new MetroFramework.Controls.MetroPanel();
             this.metroRadioButton3 = new MetroFramework.Controls.MetroRadioButton();
             this.metroRadioButton2 = new MetroFramework.Controls.MetroRadioButton();
@@ -45,6 +41,12 @@
             this.metroPanel2 = new MetroFramework.Controls.MetroPanel();
             this.TBTutar = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
+            this.urun = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.service = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.remove = new System.Windows.Forms.DataGridViewImageColumn();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.metroPanel1.SuspendLayout();
@@ -93,7 +95,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(860, 589);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1116, 589);
             this.tableLayoutPanel1.TabIndex = 2;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -102,10 +104,10 @@
             this.metroTile2.ActiveControl = null;
             this.tableLayoutPanel1.SetColumnSpan(this.metroTile2, 2);
             this.metroTile2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroTile2.Location = new System.Drawing.Point(639, 458);
+            this.metroTile2.Location = new System.Drawing.Point(831, 458);
             this.metroTile2.Name = "metroTile2";
             this.tableLayoutPanel1.SetRowSpan(this.metroTile2, 2);
-            this.metroTile2.Size = new System.Drawing.Size(100, 128);
+            this.metroTile2.Size = new System.Drawing.Size(132, 128);
             this.metroTile2.Style = MetroFramework.MetroColorStyle.Red;
             this.metroTile2.TabIndex = 2;
             this.metroTile2.UseSelectable = true;
@@ -121,7 +123,7 @@
             this.MP.Location = new System.Drawing.Point(3, 3);
             this.MP.Name = "MP";
             this.tableLayoutPanel1.SetRowSpan(this.MP, 9);
-            this.MP.Size = new System.Drawing.Size(630, 583);
+            this.MP.Size = new System.Drawing.Size(822, 583);
             this.MP.TabIndex = 0;
             this.MP.VerticalScrollbarBarColor = true;
             this.MP.VerticalScrollbarHighlightOnWheel = false;
@@ -132,12 +134,14 @@
             this.metroTile1.ActiveControl = null;
             this.tableLayoutPanel1.SetColumnSpan(this.metroTile1, 2);
             this.metroTile1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroTile1.Location = new System.Drawing.Point(745, 458);
+            this.metroTile1.Location = new System.Drawing.Point(969, 458);
             this.metroTile1.Name = "metroTile1";
             this.tableLayoutPanel1.SetRowSpan(this.metroTile1, 2);
-            this.metroTile1.Size = new System.Drawing.Size(112, 128);
+            this.metroTile1.Size = new System.Drawing.Size(144, 128);
             this.metroTile1.TabIndex = 1;
             this.metroTile1.Text = "Proceed";
+            this.metroTile1.TileTextFontSize = MetroFramework.MetroTileTextSize.Tall;
+            this.metroTile1.TileTextFontWeight = MetroFramework.MetroTileTextWeight.Bold;
             this.metroTile1.UseSelectable = true;
             // 
             // dataGridView1
@@ -151,51 +155,22 @@
             this.dataGridView1.ColumnHeadersVisible = false;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.urun,
-            this.hizmet,
-            this.adet,
-            this.fiyat,
-            this.sil});
+            this.service,
+            this.quantity,
+            this.price,
+            this.total,
+            this.remove});
             this.tableLayoutPanel1.SetColumnSpan(this.dataGridView1, 4);
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
             this.dataGridView1.GridColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.dataGridView1.Location = new System.Drawing.Point(639, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(831, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataGridView1.RowHeadersVisible = false;
             this.tableLayoutPanel1.SetRowSpan(this.dataGridView1, 4);
-            this.dataGridView1.Size = new System.Drawing.Size(218, 254);
+            this.dataGridView1.Size = new System.Drawing.Size(282, 254);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // urun
-            // 
-            this.urun.FillWeight = 135.5272F;
-            this.urun.HeaderText = "Ürün Adı";
-            this.urun.Name = "urun";
-            // 
-            // hizmet
-            // 
-            this.hizmet.HeaderText = "Hizmet";
-            this.hizmet.Name = "hizmet";
-            // 
-            // adet
-            // 
-            this.adet.FillWeight = 135.5272F;
-            this.adet.HeaderText = "Adet";
-            this.adet.Name = "adet";
-            // 
-            // fiyat
-            // 
-            this.fiyat.FillWeight = 78.18422F;
-            this.fiyat.HeaderText = "Fiyat";
-            this.fiyat.Name = "fiyat";
-            // 
-            // sil
-            // 
-            this.sil.FillWeight = 50.76142F;
-            this.sil.HeaderText = "Sil";
-            this.sil.Name = "sil";
-            this.sil.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // metroPanel1
             // 
@@ -207,10 +182,10 @@
             this.metroPanel1.HorizontalScrollbarBarColor = true;
             this.metroPanel1.HorizontalScrollbarHighlightOnWheel = false;
             this.metroPanel1.HorizontalScrollbarSize = 10;
-            this.metroPanel1.Location = new System.Drawing.Point(639, 328);
+            this.metroPanel1.Location = new System.Drawing.Point(831, 328);
             this.metroPanel1.Name = "metroPanel1";
             this.tableLayoutPanel1.SetRowSpan(this.metroPanel1, 2);
-            this.metroPanel1.Size = new System.Drawing.Size(218, 124);
+            this.metroPanel1.Size = new System.Drawing.Size(282, 124);
             this.metroPanel1.TabIndex = 3;
             this.metroPanel1.VerticalScrollbarBarColor = true;
             this.metroPanel1.VerticalScrollbarHighlightOnWheel = false;
@@ -257,9 +232,9 @@
             this.metroPanel2.HorizontalScrollbarBarColor = true;
             this.metroPanel2.HorizontalScrollbarHighlightOnWheel = false;
             this.metroPanel2.HorizontalScrollbarSize = 10;
-            this.metroPanel2.Location = new System.Drawing.Point(639, 263);
+            this.metroPanel2.Location = new System.Drawing.Point(831, 263);
             this.metroPanel2.Name = "metroPanel2";
-            this.metroPanel2.Size = new System.Drawing.Size(218, 59);
+            this.metroPanel2.Size = new System.Drawing.Size(282, 59);
             this.metroPanel2.TabIndex = 4;
             this.metroPanel2.VerticalScrollbarBarColor = true;
             this.metroPanel2.VerticalScrollbarHighlightOnWheel = false;
@@ -309,9 +284,47 @@
             this.metroLabel2.Text = "Total";
             this.metroLabel2.Visible = false;
             // 
+            // urun
+            // 
+            this.urun.FillWeight = 135.5272F;
+            this.urun.HeaderText = "Product";
+            this.urun.Name = "urun";
+            // 
+            // service
+            // 
+            this.service.HeaderText = "Service";
+            this.service.Name = "service";
+            // 
+            // quantity
+            // 
+            this.quantity.FillWeight = 135.5272F;
+            this.quantity.HeaderText = "Quantity";
+            this.quantity.Name = "quantity";
+            // 
+            // price
+            // 
+            dataGridViewCellStyle1.Format = "C2";
+            dataGridViewCellStyle1.NullValue = null;
+            this.price.DefaultCellStyle = dataGridViewCellStyle1;
+            this.price.FillWeight = 78.18422F;
+            this.price.HeaderText = "Price";
+            this.price.Name = "price";
+            // 
+            // total
+            // 
+            this.total.HeaderText = "Total";
+            this.total.Name = "total";
+            // 
+            // remove
+            // 
+            this.remove.FillWeight = 50.76142F;
+            this.remove.HeaderText = "Remove";
+            this.remove.Name = "remove";
+            this.remove.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
             // testekrani
             // 
-            this.ClientSize = new System.Drawing.Size(900, 669);
+            this.ClientSize = new System.Drawing.Size(1156, 669);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "testekrani";
             this.Text = "Laundry Basket";
@@ -342,9 +355,10 @@
         public MetroFramework.Controls.MetroLabel metroLabel2;
         public MetroFramework.Controls.MetroTextBox TBTutar;
         private System.Windows.Forms.DataGridViewTextBoxColumn urun;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hizmet;
-        private System.Windows.Forms.DataGridViewTextBoxColumn adet;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fiyat;
-        private System.Windows.Forms.DataGridViewImageColumn sil;
+        private System.Windows.Forms.DataGridViewTextBoxColumn service;
+        private System.Windows.Forms.DataGridViewTextBoxColumn quantity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn price;
+        private System.Windows.Forms.DataGridViewTextBoxColumn total;
+        private System.Windows.Forms.DataGridViewImageColumn remove;
     }
 }

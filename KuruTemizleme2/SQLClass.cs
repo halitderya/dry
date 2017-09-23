@@ -17,20 +17,20 @@ namespace KuruTemizleme2
 
         SqlConnection myConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["KuruTemizleme2.Properties.Settings.KurudbConnectionString"].ToString());
 
-        public string fiyat(string urunadi, string hizmet)
+        public int  getprice(string urunadi, string hizmet)
         {
             SqlParameter urunad = new SqlParameter("@URUN", SqlDbType.NVarChar);
             SqlParameter hizme = new SqlParameter("@HIZMET", SqlDbType.NVarChar);
             SqlCommand isim = new SqlCommand();
             isim.CommandType = CommandType.StoredProcedure;
             isim.Connection = myConnection;
-            isim.CommandText = "sp_fiyat_Getir";
+            isim.CommandText = "sp_get_price";
             myConnection.Open();
             urunad.Value = urunadi;
             hizme.Value = hizmet;
-            isim.Parameters.Add(urunadi);
-            isim.Parameters.Add(hizmet);
-            string result = isim.ExecuteScalar().ToString();
+            isim.Parameters.Add(urunad);
+            isim.Parameters.Add(hizme);
+            int result = Convert.ToInt16(isim.ExecuteScalar());
             return result;
         }
         public int hizmetsayisi()
