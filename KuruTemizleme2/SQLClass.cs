@@ -42,6 +42,10 @@ namespace KuruTemizleme2
             int result = Convert.ToInt32(sayicmd.ExecuteScalar());
             myConnection.Close();
             return result;
+
+
+
+
         }
         public string cbismi(int sira)
         {
